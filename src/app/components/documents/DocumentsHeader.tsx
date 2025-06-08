@@ -9,14 +9,16 @@ import {
 import UploadModal from './UploadModal';
 
 interface DocumentsHeaderProps {
-  onDocumentUpload: (document: any) => void;
+  onUploadComplete: (document: any) => void;
+  viewMode: 'grid' | 'list';
+  onViewModeChange: (mode: 'grid' | 'list') => void;
 }
 
-export default function DocumentsHeader({ onDocumentUpload }: DocumentsHeaderProps) {
+export default function DocumentsHeader({ onUploadComplete, viewMode, onViewModeChange }: DocumentsHeaderProps) {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   const handleUploadComplete = (document: any) => {
-    onDocumentUpload(document);
+    onUploadComplete(document);
     setIsUploadModalOpen(false);
   };
 

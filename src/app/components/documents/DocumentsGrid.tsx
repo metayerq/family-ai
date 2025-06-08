@@ -25,12 +25,17 @@ interface Document {
 
 interface DocumentsGridProps {
   documents: Document[];
-  searchQuery: string;
-  selectedCategory: string;
-  sortBy: string;
+  searchQuery?: string;
+  selectedCategory?: string;
+  sortBy?: string;
 }
 
-export default function DocumentsGrid({ documents, searchQuery, selectedCategory, sortBy }: DocumentsGridProps) {
+export default function DocumentsGrid({ 
+  documents, 
+  searchQuery = '', 
+  selectedCategory = 'all', 
+  sortBy = 'date' 
+}: DocumentsGridProps) {
   
   const getStatusBadge = (status: string, expiryDate: string | null) => {
     if (status === 'expires-soon') {
@@ -46,7 +51,7 @@ export default function DocumentsGrid({ documents, searchQuery, selectedCategory
 
   const getAIStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed':
+      case 'complete':
         return <CheckCircleIcon className="h-4 w-4 text-green-600" />;
       case 'processing':
         return <div className="h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />;
@@ -69,10 +74,10 @@ export default function DocumentsGrid({ documents, searchQuery, selectedCategory
     return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
 
-  // Filter and sort documents
+  // Filter and sort documents with null safety
   const filteredDocuments = documents
     .filter(doc => {
-      const matchesSearch = doc.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = doc.name.toLowerCase().includes((searchQuery || '').toLowerCase());
       const matchesCategory = selectedCategory === 'all' || doc.category === selectedCategory;
       return matchesSearch && matchesCategory;
     })

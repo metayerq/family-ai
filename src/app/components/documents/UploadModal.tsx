@@ -70,11 +70,12 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }: Uploa
         id: Date.now(),
         name: documentName,
         category,
+        type: category.charAt(0).toUpperCase() + category.slice(1),
         description,
         uploadDate: new Date().toISOString(),
         status: 'active',
         aiProcessing: 'processing',
-        size: selectedFiles[0].size,
+        size: Math.round(selectedFiles[0].size / 1024) + ' KB',
         fileName: selectedFiles[0].name
       };
 
@@ -206,45 +207,33 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }: Uploa
               {isUploading && (
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-slate-700">
-                      Uploading...
-                    </span>
+                    <span className="text-sm font-medium text-slate-700">Uploading...</span>
                     <span className="text-sm text-slate-500">{uploadProgress}%</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                    <div 
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-500"
                       style={{ width: `${uploadProgress}%` }}
-                    />
+                    ></div>
                   </div>
                 </div>
               )}
 
               {/* Actions */}
-              <div className="flex space-x-3">
+              <div className="flex justify-end space-x-3">
                 <button
                   onClick={handleClose}
-                  className="flex-1 px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors"
                   disabled={isUploading}
+                  className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 disabled:opacity-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleUpload}
                   disabled={!isFormValid || isUploading}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-slate-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  {isUploading ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                      Uploading...
-                    </>
-                  ) : (
-                    <>
-                      <CloudArrowUpIcon className="h-4 w-4 mr-2" />
-                      Upload
-                    </>
-                  )}
+                  {isUploading ? 'Uploading...' : 'Upload'}
                 </button>
               </div>
             </>
